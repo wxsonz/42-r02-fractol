@@ -1,5 +1,25 @@
 #include "fractol.h"
 
+// Handles panning when the mouse is being dragged
+static void	handle_panning(t_fractal *f)
+{
+	int32_t	delta_x;
+	int32_t	delta_y;
+	double	view_width;
+	double	view_height;
+
+	if (f->is_dragging)
+	{
+		mlx_get_mouse_pos(f->mlx, &f->mouse_x, &f->mouse_y);
+		delta_x = f->mouse_x - f->drag_start_x;
+		delta_y = f->mouse_y - f->drag_start_y;
+		view_width = 4.0 / f->zoom;
+		view_height = 4.0 / f->zoom;
+		f->offset_x = f->start_offset_x - (delta_x * view_width * PAN_SPEED);
+		f->offset_y = f->start_offset_y - (delta_y * view_height * PAN_SPEED);
+	}
+}
+
 // Handles keyboard controls for adjusting fractal parameters
 static void	handle_param_adjust(t_fractal *f)
 {
@@ -48,6 +68,7 @@ void	key_hook(void *param)
 		f->is_julia = false;
 	if (mlx_is_key_down(f->mlx, MLX_KEY_G))
 		f->is_julia = true;
+	handle_panning(f);
 	handle_param_adjust(f);
 	handle_iter_adjust(f);
 }

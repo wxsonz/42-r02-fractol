@@ -17,12 +17,10 @@ void	init_fractal(t_fractal *f)
 	f->z.imag = 0.0;
 	f->power_mag = 2.0;
 	f->power_ang = 2.0;
-	f->iter_max = 512;
+	f->iter_max = 128;
 	f->is_julia = false;
 	f->quality_level = 0;
 	f->view_changed = true;
-	f->is_dragging = false;
-	init_palette(f);
 	i = 0;
 	while (i < 10)
 	{
@@ -44,9 +42,6 @@ void	init_mlx(t_fractal *f)
 		cleanup_and_exit(f, EXIT_FAILURE);
 }
 
-// Declaring the new cursor hook function prototype
-void	cursor_hook(double xpos, double ypos, void *param);
-
 // Registers all MLX42 hooks for user interaction
 void	register_hooks(t_fractal *f)
 {
@@ -54,5 +49,4 @@ void	register_hooks(t_fractal *f)
 	mlx_loop_hook(f->mlx, key_hook, f);
 	mlx_scroll_hook(f->mlx, scroll_hook, f);
 	mlx_mouse_hook(f->mlx, mouse_hook, f);
-	mlx_cursor_hook(f->mlx, &cursor_hook, f);
 }

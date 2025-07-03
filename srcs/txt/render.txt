@@ -72,7 +72,7 @@ static void	draw_image(t_fractal *f)
 		while (x < WIDTH)
 		{
 			iter = calculate_iterations(f, x, y);
-			color = get_color(f, iter, f->iter_max);
+			color = get_color(iter, f->iter_max);
 			mlx_put_pixel(f->img, x, y, color);
 			x += step;
 		}

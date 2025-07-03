@@ -1,0 +1,33 @@
+#include "fractol.h"
+
+// Maps a value from one range to another
+double	map(double val, double n_min, double n_max, double o_max)
+{
+	return ((val / o_max) * (n_max - n_min)) + n_min;
+}
+
+// Adjusts view offsets to keep the point under the mouse cursor fixed during zoom
+void	adjust_offsets_for_zoom(t_fractal *f, double zoom_factor)
+{
+	double	mouse_world_x;
+	double	mouse_world_y;
+	int32_t	current_mouse_x;
+	int32_t	current_mouse_y;
+
+	// Get current mouse position (don't store in f->mouse_x/y to avoid interfering with panning)
+	mlx_get_mouse_pos(f->mlx, &current_mouse_x, &current_mouse_y);
+	
+	// Convert mouse screen coordinates to world coordinates BEFORE zoom
+	// This matches exactly how coordinates are calculated in math_fractol.c
+	mouse_world_x = map(current_mouse_x, -2.0, 2.0, WIDTH) / f->zoom + f->offset_x;
+	mouse_world_y = map(current_mouse_y, -2.0, 2.0, HEIGHT) / f->zoom + f->offset_y;
+	
+	// Apply zoom factor
+	f->zoom *= zoom_factor;
+	
+	// Calculate what the new offset should be to keep the mouse point fixed
+	// After zoom, we want: mouse_world_x = map(mouse_x, -2.0, 2.0, WIDTH) / new_zoom + new_offset_x
+	// So: new_offset_x = mouse_world_x - map(mouse_x, -2.0, 2.0, WIDTH) / new_zoom
+	f->offset_x = mouse_world_x - map(current_mouse_x, -2.0, 2.0, WIDTH) / f->zoom;
+	f->offset_y = mouse_world_y - map(current_mouse_y, -2.0, 2.0, HEIGHT) / f->zoom;
+}

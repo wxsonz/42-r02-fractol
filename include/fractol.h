@@ -5,7 +5,7 @@
 # include <math.h>
 # include <stdlib.h>
 # include <stdbool.h>
-# include <unistd.h> // For write in ft_putstr_fd
+# include <unistd.h>
 
 // Return values
 # define SUCCESS 0
@@ -15,6 +15,7 @@
 # define WIDTH 1024
 # define HEIGHT 1024
 # define MAX_ITER 1024
+# define PALETTE_SIZE 1024
 
 // Control sensitivity
 # define KEY_STEP 0.05
@@ -63,6 +64,8 @@ typedef struct s_fractal
 	double			last_params[10];
 	bool			view_changed;
 
+	uint32_t		palette[PALETTE_SIZE];
+
 }	t_fractal;
 
 // --- Function Prototypes ---
@@ -74,6 +77,7 @@ void		cleanup_and_exit(t_fractal *f, int status);
 int			parse_args(int argc, char **argv, t_fractal *f);
 
 // init.c
+void		init_palette(t_fractal *f);
 void		init_fractal(t_fractal *f);
 void		init_mlx(t_fractal *f);
 void		register_hooks(t_fractal *f);
@@ -89,7 +93,7 @@ double		map(double val, double n_min, double n_max, double o_max);
 void		adjust_offsets_for_zoom(t_fractal *f, double zoom_factor);
 
 // color.c
-uint32_t	get_color(int value, int max_value);
+uint32_t	get_color(t_fractal *f, int value, int max_value);
 
 // events_mouse.c
 void		scroll_hook(double xdelta, double ydelta, void *param);
