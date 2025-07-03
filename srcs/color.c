@@ -17,8 +17,8 @@ void	init_palette(t_fractal *f)
 {
 	static const uint32_t	key_colors[] = {
 		0x000000FF,
-		0x00429dFF,
-		0xfee090FF,
+		0x1032A6FF,
+		0xF62D2DFF,
 		0xFFFFFFFF
 	};
 	int						num_keys;
